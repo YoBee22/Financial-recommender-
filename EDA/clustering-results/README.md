@@ -2,9 +2,9 @@
 
 ---
 
-## 📁 **Files Overview**
+## **Files Overview**
 
-### **📊 Visualizations**
+### **Visualizations**
 - **`optimal_k_analysis.png`** - Analysis for selecting optimal number of clusters (K=2 to K=10)
   - Elbow method plot
   - Silhouette score analysis
@@ -20,14 +20,14 @@
 - **`feature_importance.png`** - Top 20 most important features from Random Forest
 - **`correlation_heatmap.png`** - Correlation matrix of selected features
 
-### **📈 Data Files**
+### **Data Files**
 - **`clustered_households.csv`** - Original dataset with cluster assignments (13,886 households)
 - **`cluster_statistics.csv`** - Detailed statistics for each cluster
 - **`cluster_profiles.csv`** - Business-friendly cluster descriptions
 
 ---
 
-## 🎯 **Cluster Summary**
+## **Cluster Summary**
 
 ### **Cluster 0: High Income Savers (32.6%)**
 - Income: $199,221 | Expenditure: $22,720 | Savings: 86.4%
@@ -43,7 +43,7 @@
 
 ---
 
-## 📊 **Clustering Metrics**
+## **Clustering Metrics**
 - **Optimal K**: 3 clusters
 - **Silhouette Score**: 0.184 (moderate clustering quality)
 - **Calinski-Harabasz Score**: 2,117
@@ -52,7 +52,7 @@
 
 ---
 
-## 🔧 **Technical Details**
+## **Technical Details**
 - **Algorithm**: K-means with random_state=42
 - **Preprocessing**: StandardScaler (mean=0, std=1)
 - **Dimensionality Reduction**: PCA for visualization
@@ -60,7 +60,7 @@
 
 ---
 
-## 📋 **Usage Notes**
+## **Usage Notes**
 - Use `clustered_households.csv` for downstream analysis
 - Refer to `cluster_profiles.csv` for business interpretations
 - Visualizations are presentation-ready for stakeholders
