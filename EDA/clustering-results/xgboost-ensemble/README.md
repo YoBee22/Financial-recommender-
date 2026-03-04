@@ -2,9 +2,9 @@
 
 ---
 
-## 📁 **Files Overview**
+## **Files Overview**
 
-### **📊 Visualizations**
+### **Visualizations**
 - **`model_performance_comparison.png`** - Comprehensive model performance comparison
   - Accuracy comparison across XGBoost, Random Forest, and Ensemble
   - AUC score comparison for all target variables
@@ -16,14 +16,14 @@
   - `feature_importance_needs_investment_product.png`
   - `feature_importance_needs_insurance_product.png`
 
-### **📈 Data Files**
+### **Data Files**
 - **`model_performance_summary.csv`** - Complete performance metrics for all models
 - **`household_predictions.csv`** - Predictions for all 13,886 households
 - **`feature_importance_*.csv`** - Detailed feature importance rankings for each target
 
 ---
 
-## 🎯 **Model Performance Summary**
+## **Model Performance Summary**
 
 ### **Outstanding Results**
 All models achieved **near-perfect performance** (99.9-100% accuracy):
@@ -39,7 +39,7 @@ All models achieved **near-perfect performance** (99.9-100% accuracy):
 
 ---
 
-## 🔑 **Key Feature Insights**
+## **Key Feature Insights**
 
 ### **Investment Product Drivers** (Top 5):
 1. **income_rank** (75.3% importance) - Primary driver
@@ -55,7 +55,7 @@ All models achieved **near-perfect performance** (99.9-100% accuracy):
 
 ---
 
-## 📊 **Model Architecture**
+## **Model Architecture**
 
 ### **Ensemble Components**
 - **XGBoost**: 200 trees, max_depth=6, learning_rate=0.1
@@ -71,7 +71,7 @@ All models achieved **near-perfect performance** (99.9-100% accuracy):
 
 ---
 
-## 🎯 **Business Applications**
+## **Business Applications**
 
 ### **Product Recommendation System**
 - **High-precision targeting** for financial products
@@ -86,7 +86,7 @@ All models achieved **near-perfect performance** (99.9-100% accuracy):
 
 ---
 
-## 📋 **Usage Notes**
+## **Usage Notes**
 
 ### **For Production**
 - Use `household_predictions.csv` for real-time recommendations
@@ -100,7 +100,7 @@ All models achieved **near-perfect performance** (99.9-100% accuracy):
 
 ---
 
-## 🚀 **Next Steps**
+## **Next Steps**
 1. **Integration**: Deploy models in production recommendation system
 2. **Monitoring**: Track model performance over time
 3. **Retraining**: Update models with new data quarterly
