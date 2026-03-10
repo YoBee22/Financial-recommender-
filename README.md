@@ -18,6 +18,7 @@ A **hybrid architecture** combining:
 ## Goal
 Make accessible, personalized financial guidance available to everyone and improve long-term financial decision-making through explainable AI.
 
-current progress : We completed EDA and feature engineering on all three datasets — Census-Income (199K users), US Funds (26K ETFs/mutual funds), and Consumer Expenditure Survey (23K households). K-Means clustering on Census data identified 10 user personas (silhouette 0.483) mapped to fund risk tiers and financial product recommendations. Supervised classifiers (Logistic Regression, Random Forest, XGBoost) were built to predict risk tolerance from raw demographics for real-time user classification. 
+## current progress
+We completed EDA and feature engineering on all three datasets — Census-Income (199K users), US Funds (26K ETFs/mutual funds), and Consumer Expenditure Survey (23K households). K-Means clustering on Census data identified 10 user personas (silhouette 0.483) mapped to fund risk tiers and financial product recommendations. Supervised classifiers (Logistic Regression, Random Forest, XGBoost) were built to predict risk tolerance from raw demographics for real-time user classification. 
 
 Next steps: CE Survey spending persona clustering, content-based filtering for fund matching via cosine similarity, and integration with the rule engine, RAG pipeline, and FastAPI/Streamlit application.
