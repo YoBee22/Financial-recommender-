@@ -30,11 +30,15 @@ venv/
 .DS_Store
 Thumbs.db
 
-# Large visualization files
+# Large visualization files (exclude all, then include specific ones)
 *.png
 *.jpg
 *.jpeg
 *.pdf
+
+# Include important visualization files
+!EDA/clustering-results/*.png
+!EDA/clustering-results/xgboost-ensemble/*.png
 
 # Keep small config files
 !requirements.txt
