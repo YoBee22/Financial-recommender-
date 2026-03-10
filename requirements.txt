@@ -1,0 +1,39 @@
+
+# Personalized Financial Recommendation System
+# Requirements - Python 3.12+
+# Install: pip install -r requirements.txt
+
+# Core Data Science
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.5.1
+
+# Gradient Boosting
+xgboost==2.1.1
+
+# Visualization
+matplotlib==3.9.2
+seaborn==0.13.2
+
+# Dataset Loading
+ucimlrepo==0.0.7
+kagglehub==0.3.4
+
+# Model Persistence
+joblib==1.4.2
+
+# API & Application (for integration phase)
+fastapi==0.115.0
+uvicorn==0.30.6
+streamlit==1.38.0
+
+# RAG Pipeline 
+chromadb==0.5.5
+sentence-transformers==3.1.0
+openai==1.47.0
+langchain==0.3.0
+
+# Utilities
+python-dateutil==2.9.0
+pytz==2024.1
+certifi==2025.7.14
