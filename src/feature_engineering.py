@@ -311,7 +311,7 @@ class CEFeatureEngineerFixed:
         # Age x Expenditure interactions
         features_df['age_x_expenditure'] = features_df['age_ref'] * features_df['log_expenditure']
         
-        # FIXED: Handle inf values in income_x_expenditure_ratio
+        # Handle inf values in income_x_expenditure_ratio
         features_df['income_x_expenditure_ratio'] = features_df['income_rank'] * features_df['expenditure_to_income_ratio']
         features_df['income_x_expenditure_ratio'] = features_df['income_x_expenditure_ratio'].replace([np.inf, -np.inf], np.nan)
         features_df['income_x_expenditure_ratio'] = features_df['income_x_expenditure_ratio'].fillna(

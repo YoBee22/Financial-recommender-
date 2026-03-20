@@ -126,14 +126,6 @@ AI-powered financial recommendation system that analyzes customer demographics, 
 
 ---
 
-## Technical Performance
-
-### Computational Efficiency
-- Feature Engineering: ~2 minutes for 13,886 households
-- K-means Clustering: ~30 seconds convergence
-- XGBoost Training: ~1 minute per model
-- Total Pipeline: ~5 minutes end-to-end
-
 ### Model Validation
 - Cross-Validation: 5-fold stratified sampling
 - Metrics: Accuracy, Precision, Recall, F1, AUC-ROC
