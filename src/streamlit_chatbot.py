@@ -135,7 +135,7 @@ st.markdown("""
     /* Input area styling */
     .input-container {
         background: white;
-        padding: 1.5rem;
+        padding: 0;
         border-radius: 15px;
         box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         border: 1px solid #e9ecef;
@@ -242,12 +242,14 @@ st.markdown("""
         text-align: center;
         padding: 1rem;
         margin: 0;
-        position: relative;
+        position: fixed;
+        bottom: 0;
         left: 0;
         right: 0;
         width: 100%;
         font-size: 0.9rem;
         box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+        z-index: 999;
     }
     
     .footer p {
@@ -255,10 +257,10 @@ st.markdown("""
         opacity: 0.9;
     }
     
-    /* Main content area with fixed header only */
+    /* Main content area with fixed header and footer */
     .main-content {
         padding-top: 5px;
-        padding-bottom: 20px;
+        padding-bottom: 80px;
         min-height: 100vh;
         box-sizing: border-box;
         margin-top: 0;
@@ -621,18 +623,15 @@ Would you like to ask me anything specific about your financial situation or rec
         # Full-width header at top
         st.markdown("""
         <div class="main-header">
-            <h1 style="margin: 0; font-size: 2.5rem;">Financial Advisor Chatbot</h1>
-            <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">Your personal AI-powered financial assistant</p>
+            <h1 style="margin: 0; font-size: 3rem;">FinWise</h1>
+            <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 1.5rem;">Your personal AI-powered financial assistant</p>
         </div>
         """, unsafe_allow_html=True)
         
-        # Main content wrapper
-        st.markdown('<div class="main-content">', unsafe_allow_html=True)
-        
-        # Tips section (only show before classification)
+        # Tips section (only show before classification) - right after header
         if not st.session_state.classification_done:
             st.markdown("""
-            <div class="help-text" style="margin: 0; padding: 0.5rem;">
+            <div class="help-text" style="margin: 5rem 0 1rem 0; padding: 0.5rem;">
                 <strong>Tips:</strong><br>
                 • Enter numbers without commas or dollar signs<br>
                 • Be honest about your financial situation for better recommendations<br>
@@ -678,7 +677,6 @@ Would you like to ask me anything specific about your financial situation or rec
                     self._restart_chat()
                     st.rerun()
         
-        st.markdown('</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
         
         # Footer at bottom
