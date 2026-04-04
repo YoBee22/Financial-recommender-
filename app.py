@@ -28,6 +28,39 @@ def check_chromadb():
     except ImportError:
         return False
 
+def show_chromadb_error():
+    """Show helpful error when ChromaDB is not available"""
+    st.error("⚠️ RAG System Unavailable")
+    st.info("""
+    **ChromaDB is not installed on this deployment**
+    
+    The app will run in limited mode:
+    - ✅ Landing page works
+    - ✅ Dashboard works  
+    - ❌ Chatbot RAG features disabled
+    - ❌ Advanced financial advice unavailable
+    
+    **To fix this:**
+    1. Update requirements.txt with correct ChromaDB version
+    2. Redeploy application
+    3. Contact support if issues persist
+    """)
+    
+    # Show basic navigation
+    st.write("---")
+    st.subheader("Available Features")
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        if st.button("🏠 Landing Page", key="landing_fallback"):
+            st.session_state.current_page = 'landing'
+            st.rerun()
+    
+    with col2:
+        if st.button("📊 Dashboard", key="dashboard_fallback"):
+            st.session_state.current_page = 'dashboard'
+            st.rerun()
+
 def main():
     """Main app with graceful fallback"""
     
@@ -35,21 +68,7 @@ def main():
     chromadb_available = check_chromadb()
     
     if not chromadb_available:
-        st.error("⚠️ ChromaDB is not available on this deployment")
-        st.info("The app will run in limited mode without RAG functionality.")
-        st.write("Please contact support to enable full RAG features.")
-        
-        # Show basic app without RAG
-        st.title("🌿 FinWise Financial System")
-        st.write("Limited mode - RAG features disabled")
-        
-        # Load basic components that don't require ChromaDB
-        try:
-            from ml.cluster_mapping import ClusterMapper
-            st.success("✅ ML components loaded")
-        except Exception as e:
-            st.error(f"❌ ML components failed: {e}")
-            
+        show_chromadb_error()
         return
     
     # If ChromaDB is available, run full app
