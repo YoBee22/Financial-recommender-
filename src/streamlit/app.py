@@ -56,6 +56,43 @@ def show_chromadb_error():
         if st.button("📊 Dashboard", key="dashboard_fallback"):
             st.session_state.current_page = 'dashboard'
             st.rerun()
+    
+    # Add direct chatbot links
+    st.write("---")
+    st.subheader("🤖 Chatbot Options")
+    
+    st.info("""
+    **Try Chatbot with Limited Features:**
+    
+    Even without RAG, the chatbot can help with:
+    - Basic financial guidance
+    - User profile analysis
+    - Investment recommendations
+    - Budget planning
+    
+    **Direct Links:**
+    - [🤖 Try Chatbot (Basic Mode)](?page=chatbot)
+    - [📊 View Dashboard](?page=dashboard)
+    - [🏠 Back to Landing](?page=landing)
+    """)
+    
+    # Quick navigation buttons
+    col3, col4, col5 = st.columns(3)
+    
+    with col3:
+        if st.button("🤖 Try Chatbot", key="chatbot_basic"):
+            st.session_state.current_page = 'chatbot'
+            st.rerun()
+    
+    with col4:
+        if st.button("📊 Dashboard", key="dashboard_link"):
+            st.session_state.current_page = 'dashboard'
+            st.rerun()
+    
+    with col5:
+        if st.button("🏠 Landing", key="landing_link"):
+            st.session_state.current_page = 'landing'
+            st.rerun()
 
 def main():
     # Initialize session state for navigation
