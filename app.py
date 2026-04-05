@@ -193,7 +193,7 @@ def main():
             return
             
         try:
-            from streamlit.streamlit_chatbot import LiteFinancialChatbot
+            from frontend.streamlit_chatbot import LiteFinancialChatbot
             chatbot = LiteFinancialChatbot()
             chatbot.run()
                 
@@ -209,7 +209,7 @@ def main():
             
     elif page == 'dashboard':
         try:
-            from streamlit.dashboard import main as dashboard_main
+            from frontend.dashboard import main as dashboard_main
             dashboard_main()
                 
         except Exception as e:
@@ -218,7 +218,7 @@ def main():
             
     elif page == 'landing':
         try:
-            from streamlit.landing_page import main as landing_main
+            from frontend.landing_page import main as landing_main
             landing_main()
                 
         except Exception as e:
@@ -228,7 +228,7 @@ def main():
     else:
         # Default landing page
         try:
-            from streamlit.landing_page import main as landing_main
+            from frontend.landing_page import main as landing_main
             landing_main()
                 
         except Exception as e:

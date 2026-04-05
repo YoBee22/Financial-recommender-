@@ -16,7 +16,7 @@ os.environ['CHROMA_TELEMETRY'] = 'False'
 os.environ['POSTHOG_DISABLE'] = 'True'
 
 # Import and run the main app
-from streamlit.app import main as app_main
+from frontend.app import main as app_main
 
 if __name__ == "__main__":
     app_main()
