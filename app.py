@@ -35,21 +35,21 @@ def check_chromadb():
 
 def show_chromadb_error():
     """Show helpful error when ChromaDB is not available"""
-    st.error("⚠️ RAG System Unavailable")
+    st.error("RAG System Unavailable")
     st.info("""
     **ChromaDB installation issue detected**
     
     The app will run in limited mode:
-    - ✅ Landing page works
-    - ✅ Dashboard works  
-    - ❌ Chatbot RAG features disabled
-    - ❌ Advanced financial advice unavailable
+    - Landing page works
+    - Dashboard works  
+    - Chatbot RAG features disabled
+    - Advanced financial advice unavailable
     
     **Troubleshooting Steps:**
-    1. ✅ Updated requirements.txt with ChromaDB 0.4.15
-    2. 🔄 Redeploy application (force restart)
-    3. ⏳ Wait 2-3 minutes for full initialization
-    4. 📱 Try accessing chatbot again
+    1. Updated requirements.txt with ChromaDB 0.4.15
+    2. Redeploy application (force restart)
+    3. Wait 2-3 minutes for full initialization
+    4. Try accessing chatbot again
     
     **If still failing:**
     - Clear browser cache
@@ -63,18 +63,18 @@ def show_chromadb_error():
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("🏠 Landing Page", key="landing_fallback"):
+        if st.button("Landing Page", key="landing_fallback"):
             st.session_state.current_page = 'landing'
             st.rerun()
     
     with col2:
-        if st.button("📊 Dashboard", key="dashboard_fallback"):
+        if st.button("Dashboard", key="dashboard_fallback"):
             st.session_state.current_page = 'dashboard'
             st.rerun()
     
     # Add direct chatbot links
     st.write("---")
-    st.subheader("🤖 Chatbot Options")
+    st.subheader("Chatbot Options")
     
     st.info("""
     **Try Chatbot with Limited Features:**
@@ -86,26 +86,26 @@ def show_chromadb_error():
     - Budget planning
     
     **Direct Links:**
-    - [🤖 Try Chatbot (Basic Mode)](?page=chatbot)
-    - [📊 View Dashboard](?page=dashboard)
-    - [🏠 Back to Landing](?page=landing)
+    - [Try Chatbot (Basic Mode)](?page=chatbot)
+    - [View Dashboard](?page=dashboard)
+    - [Back to Landing](?page=landing)
     """)
     
     # Quick navigation buttons
     col3, col4, col5 = st.columns(3)
     
     with col3:
-        if st.button("🤖 Try Chatbot", key="chatbot_basic"):
+        if st.button("Try Chatbot", key="chatbot_basic"):
             st.session_state.current_page = 'chatbot'
             st.rerun()
     
     with col4:
-        if st.button("📊 Dashboard", key="dashboard_link"):
+        if st.button("Dashboard", key="dashboard_link"):
             st.session_state.current_page = 'dashboard'
             st.rerun()
     
     with col5:
-        if st.button("🏠 Landing", key="landing_link"):
+        if st.button("Landing", key="landing_link"):
             st.session_state.current_page = 'landing'
             st.rerun()
 
