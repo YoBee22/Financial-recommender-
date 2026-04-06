@@ -1090,7 +1090,7 @@ def main():
             <div>
                 <div style="font-size: 0.8rem; color: rgba(240,237,230,0.4); margin-bottom: 0.5rem;">{horizon}-YR WEALTH</div>
                 <div style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #8ac35a; margin-bottom: 0.3rem;">
-                    {"${projected_30yr/1e6:.2f}M" if projected_30yr>1e6 else f"${projected_30yr:,.0f}"}
+                    {f"${projected_30yr/1e6:.2f}M" if projected_30yr>1e6 else f"${projected_30yr:,.0f}"}
                 </div>
                 <div style="font-size: 0.85rem; color: rgba(240,237,230,0.5);">
                     at {effective_target_rate:.0%} rate
