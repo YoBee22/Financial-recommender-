@@ -40,22 +40,8 @@ class FinancialRAGSystem:
         # Initialize embedding model
         self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
         
-        # Initialize ChromaDB with telemetry disabled
-        try:
-            self.chroma_client = chromadb.PersistentClient(
-                path=str(self.vector_store_path),
-                settings=Settings(
-                    anonymized_telemetry=False,
-                    allow_reset=False,
-                    is_persistent=True
-                )
-            )
-        except Exception as e:
-            logger.warning(f"Failed to initialize persistent ChromaDB client: {e}")
-            # Fallback to in-memory client
-            self.chroma_client = chromadb.Client(
-                settings=Settings(anonymized_telemetry=False)
-            )
+      # Initialize ChromaDB - use in-memory client for Streamlit Cloud compatibility
+        self.chroma_client = chromadb.Client()
         self.collection = None
         
         # Gemini API configuration - use environment variable first, then parameter
@@ -351,30 +337,11 @@ class FinancialRAGSystem:
         logger.info("Initializing vector store...")
         
         # Create or get collection
-        try:
-            # Try to get existing collection
-            self.collection = self.chroma_client.get_collection("financial_knowledge")
-            # Clear existing documents if any
-            try:
-                self.collection.delete(where={})
-            except:
-                pass
-        except Exception:
-            # Collection doesn't exist or has issues, create fresh
-            try:
-                self.collection = self.chroma_client.create_collection(
-                    name="financial_knowledge",
-                    metadata={"description": "Financial knowledge base for RAG system"}
-                )
-            except Exception as e:
-                logger.error(f"Failed to create collection: {e}")
-                # Fallback: create in-memory client
-                self.chroma_client = chromadb.Client()
-                self.collection = self.chroma_client.create_collection(
-                    name="financial_knowledge",
-                    metadata={"description": "Financial knowledge base for RAG system"}
-                )
-        
+        self.collection = self.chroma_client.get_or_create_collection(
+            name="financial_knowledge",
+            metadata={"description": "Financial knowledge base for RAG system"}
+        )
+              
         # Prepare documents for embedding
         if not self.documents:
             self.create_financial_knowledge_base()
