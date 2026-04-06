@@ -10,6 +10,7 @@ import sys
 import warnings
 from datetime import datetime
 import logging
+logger = logging.getLogger(__name__)
 warnings.filterwarnings('ignore')
 
 sys.path.append(str(Path(__file__).parent.parent))
