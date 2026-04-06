@@ -477,8 +477,7 @@ class LiteFinancialChatbot:
         
         if 'messages' not in st.session_state:
             st.session_state.messages = []
-            rag_status = "🟢 RAG enabled" if st.session_state.get('rag_ready', False) else "🔴 RAG disabled"
-            self._add_bot_message(f"Hello! I'm **FinWise**, your personal financial advisor. {rag_status} - I can provide detailed financial guidance and match you with funds from real ETF & mutual fund data.")
+            self._add_bot_message("Hello! I'm **FinWise**, your personal financial advisor. I can provide detailed financial guidance and match you with funds from real ETF & mutual fund data.")
             self._add_bot_message("Let's start simple. What is your **annual household income**? *(e.g. 75000)*")
 
         if 'user_data' not in st.session_state:
