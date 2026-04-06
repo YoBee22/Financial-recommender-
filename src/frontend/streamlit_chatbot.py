@@ -365,7 +365,7 @@ def inject_chat_css():
             background: rgba(255,255,255,0.04) !important;
             border: 1px solid rgba(138,195,90,0.2) !important;
             border-radius: 12px !important;
-            color: #000000 !important;
+            color: #f0ede6 !important;
             font-family: 'DM Sans', sans-serif !important;
             font-size: 0.92rem !important;
             padding: 0.75rem 1rem !important;
