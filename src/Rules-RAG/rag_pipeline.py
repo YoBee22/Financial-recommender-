@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import chromadb
 from chromadb.config import Settings
+from chromadb.utils.embedding_functions import GoogleGenerativeAiEmbeddingFunction
 import google.generativeai as genai
 
 def build_documents():
@@ -48,12 +49,21 @@ def init_rag():
         tuple: (chroma_client, collection, model)
     """
     try:
-        # Initialize ChromaDB
+        # Initialize ChromaDB with Google embeddings (avoids PyTorch dependency)
+        api_key = os.getenv("GOOGLE_API_KEY")
+        
+        google_ef = GoogleGenerativeAiEmbeddingFunction(
+            api_key=api_key,
+            model_name="models/embedding-001"
+        )
+        
         chroma_client = chromadb.PersistentClient(path="./data/vector_store")
-        collection = chroma_client.get_or_create_collection("financial_advice")
+        collection = chroma_client.get_or_create_collection(
+            "financial_advice",
+            embedding_function=google_ef
+        )
         
         # Initialize Gemini
-        api_key = os.getenv("GOOGLE_API_KEY")
         if api_key:
             genai.configure(api_key=api_key)
             model = genai.GenerativeModel('gemini-pro')
@@ -89,7 +99,7 @@ def ask(query, collection, model):
         )
         
         # Generate response using retrieved context
-        context = " ".join([doc['content'] for doc in results['documents'][0]])
+        context = " ".join(results['documents'][0])
         prompt = f"Based on this financial information: {context}\n\nAnswer: {query}"
         
         response = model.generate_content(prompt)

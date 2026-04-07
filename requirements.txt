@@ -1,4 +1,3 @@
-
 # Personalized Financial Recommendation System
 # Combined Requirements - Development + Streamlit Cloud
 # Install: pip install -r requirements.txt
@@ -31,9 +30,7 @@ streamlit==1.38.0
 
 # RAG Pipeline (Streamlit Cloud Compatible)
 chromadb==0.4.15
-sentence-transformers==3.1.0
 google-generativeai==0.3.2
-langchain==0.0.350
 
 # Utilities
 python-dateutil==2.9.0

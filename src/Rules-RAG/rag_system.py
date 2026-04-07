@@ -12,7 +12,7 @@ import os
 from typing import List, Dict, Any, Optional
 import chromadb
 from chromadb.config import Settings
-from sentence_transformers import SentenceTransformer
+from chromadb.utils.embedding_functions import GoogleGenerativeAiEmbeddingFunction
 import google.generativeai as genai
 from datetime import datetime
 import sys
@@ -37,15 +37,20 @@ class FinancialRAGSystem:
         self.knowledge_base_path.mkdir(parents=True, exist_ok=True)
         self.vector_store_path.mkdir(parents=True, exist_ok=True)
         
-        # Initialize embedding model
-        self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+        # Gemini API configuration - use environment variable first, then parameter
+        self.api_key = api_key or os.getenv('GEMINI_API_KEY')
         
-      # Initialize ChromaDB - use in-memory client for Streamlit Cloud compatibility
+        # Initialize Google embedding function (replaces SentenceTransformer to avoid PyTorch)
+        self.embedding_function = GoogleGenerativeAiEmbeddingFunction(
+            api_key=self.api_key,
+            model_name="models/embedding-001"
+        )
+        
+        # Initialize ChromaDB - use in-memory client for Streamlit Cloud compatibility
         self.chroma_client = chromadb.Client()
         self.collection = None
         
-        # Gemini API configuration - use environment variable first, then parameter
-        self.api_key = api_key or os.getenv('GEMINI_API_KEY')
+        # Initialize Gemini generative model
         if self.api_key:
             genai.configure(api_key=self.api_key)
             self.model = genai.GenerativeModel('gemini-pro')
@@ -336,10 +341,11 @@ class FinancialRAGSystem:
         """Initialize ChromaDB vector store with documents"""
         logger.info("Initializing vector store...")
         
-        # Create or get collection
+        # Create or get collection with Google embedding function
         self.collection = self.chroma_client.get_or_create_collection(
             name="financial_knowledge",
-            metadata={"description": "Financial knowledge base for RAG system"}
+            metadata={"description": "Financial knowledge base for RAG system"},
+            embedding_function=self.embedding_function
         )
               
         # Prepare documents for embedding
@@ -355,16 +361,12 @@ class FinancialRAGSystem:
             metadatas.append(doc["metadata"])
             ids.append(doc["id"])
         
-        # Create embeddings
-        logger.info("Creating embeddings...")
-        embeddings = self.embedding_model.encode(documents)
-        
-        # Add to ChromaDB
+        # Add to ChromaDB (embedding function handles encoding automatically)
+        logger.info("Adding documents to vector store...")
         self.collection.add(
             documents=documents,
             metadatas=metadatas,
-            ids=ids,
-            embeddings=embeddings.tolist()
+            ids=ids
         )
         
         self.is_initialized = True
@@ -375,12 +377,9 @@ class FinancialRAGSystem:
         if not self.is_initialized:
             self.initialize_vector_store()
         
-        # Create query embedding
-        query_embedding = self.embedding_model.encode([query])
-        
-        # Search ChromaDB
+        # Search ChromaDB (embedding function handles query encoding)
         results = self.collection.query(
-            query_embeddings=query_embedding.tolist(),
+            query_texts=[query],
             n_results=n_results
         )
         
@@ -480,15 +479,11 @@ class FinancialRAGSystem:
             metadatas.append(doc["metadata"])
             ids.append(doc["id"])
         
-        # Create embeddings
-        embeddings = self.embedding_model.encode(documents)
-        
-        # Add to ChromaDB
+        # Add to ChromaDB (embedding function handles encoding automatically)
         self.collection.add(
             documents=documents,
             metadatas=metadatas,
-            ids=ids,
-            embeddings=embeddings.tolist()
+            ids=ids
         )
         
         logger.info(f"Added {len(new_documents)} new documents to knowledge base")
