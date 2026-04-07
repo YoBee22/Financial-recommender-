@@ -20,8 +20,7 @@ import logging
 from typing import List, Dict, Any, Optional
 import chromadb
 from chromadb.config import Settings
-from chromadb.utils.embedding_functions import GoogleGenerativeAiEmbeddingFunction
-import google.generativeai as genai
+from google import genai
 from datetime import datetime
 import sys
 
@@ -32,6 +31,21 @@ os.environ['CHROMA_TELEMETRY'] = 'False'
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+class GeminiEmbeddingFunction:
+    """Custom ChromaDB embedding function using the new google-genai SDK."""
+    
+    def __init__(self, api_key):
+        self.client = genai.Client(api_key=api_key)
+    
+    def __call__(self, input):
+        result = self.client.models.embed_content(
+            model='text-embedding-004',
+            contents=input
+        )
+        return [e.values for e in result.embeddings]
+
 
 class FinancialRAGSystem:
     """RAG system for financial knowledge retrieval and generation"""
@@ -46,22 +60,20 @@ class FinancialRAGSystem:
         self.vector_store_path.mkdir(parents=True, exist_ok=True)
         
         # Gemini API configuration - use environment variable first, then parameter
-        self.api_key = api_key or os.getenv('GEMINI_API_KEY')
+        self.api_key = api_key or os.getenv('GEMINI_API_KEY') or os.getenv('GOOGLE_API_KEY')
         
-        # Initialize Google embedding function (replaces SentenceTransformer to avoid PyTorch)
-        self.embedding_function = GoogleGenerativeAiEmbeddingFunction(
-            api_key=self.api_key,
-            model_name="models/text-embedding-004"
-        )
+        # Initialize Google embedding function using new google-genai SDK
+        self.embedding_function = GeminiEmbeddingFunction(api_key=self.api_key)
         
         # Initialize ChromaDB - EphemeralClient avoids SQLite tenant issues on Streamlit Cloud
         self.chroma_client = chromadb.EphemeralClient()
         self.collection = None
         
-        # Initialize Gemini generative model
+        # Initialize Gemini client for text generation
         if self.api_key:
-            genai.configure(api_key=self.api_key)
-            self.model = genai.GenerativeModel('gemini-2.0-flash')
+            self.client = genai.Client(api_key=self.api_key)
+        else:
+            self.client = None
         
         self.documents = []
         self.is_initialized = False
@@ -431,9 +443,10 @@ class FinancialRAGSystem:
         
         try:
             # Generate response using Gemini
-            if self.api_key:
-                response = self.model.generate_content(
-                    f"""You are a helpful financial advisor assistant. Use the provided context to answer the user's question.
+            if self.client:
+                response = self.client.models.generate_content(
+                    model='gemini-2.0-flash',
+                    contents=f"""You are a helpful financial advisor assistant. Use the provided context to answer the user's question.
                     Provide clear, practical advice and always include a disclaimer that this is not professional financial advice.
                     
                     Context:

@@ -14,9 +14,22 @@ except ImportError:
 
 from pathlib import Path
 import chromadb
-from chromadb.config import Settings
-from chromadb.utils.embedding_functions import GoogleGenerativeAiEmbeddingFunction
-import google.generativeai as genai
+from google import genai
+
+
+class GeminiEmbeddingFunction:
+    """Custom ChromaDB embedding function using the new google-genai SDK."""
+    
+    def __init__(self, api_key):
+        self.client = genai.Client(api_key=api_key)
+    
+    def __call__(self, input):
+        result = self.client.models.embed_content(
+            model='text-embedding-004',
+            contents=input
+        )
+        return [e.values for e in result.embeddings]
+
 
 def build_documents():
     """
@@ -54,16 +67,17 @@ def init_rag():
     Initialize RAG system with ChromaDB and Gemini.
     
     Returns:
-        tuple: (chroma_client, collection, model)
+        tuple: (chroma_client, collection, client)
     """
     try:
-        # Initialize ChromaDB with Google embeddings (avoids PyTorch dependency)
         api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
         
-        google_ef = GoogleGenerativeAiEmbeddingFunction(
-            api_key=api_key,
-            model_name="models/text-embedding-004"
-        )
+        if not api_key:
+            print("RAG initialization error: Please provide a Google API key.")
+            return None, None, None
+        
+        # Initialize embedding function using new google-genai SDK
+        google_ef = GeminiEmbeddingFunction(api_key=api_key)
         
         chroma_client = chromadb.EphemeralClient()
         collection = chroma_client.get_or_create_collection(
@@ -71,14 +85,10 @@ def init_rag():
             embedding_function=google_ef
         )
         
-        # Initialize Gemini
-        if api_key:
-            genai.configure(api_key=api_key)
-            model = genai.GenerativeModel('gemini-2.0-flash')
-        else:
-            model = None
+        # Initialize Gemini client for text generation
+        client = genai.Client(api_key=api_key)
             
-        return chroma_client, collection, model
+        return chroma_client, collection, client
         
     except Exception as e:
         print(f"RAG initialization error: {e}")
@@ -91,7 +101,7 @@ def ask(query, collection, model):
     Args:
         query (str): User question
         collection: ChromaDB collection
-        model: Gemini model instance
+        model: google-genai Client instance
         
     Returns:
         str: Generated response
@@ -110,7 +120,10 @@ def ask(query, collection, model):
         context = " ".join(results['documents'][0])
         prompt = f"Based on this financial information: {context}\n\nAnswer: {query}"
         
-        response = model.generate_content(prompt)
+        response = model.models.generate_content(
+            model='gemini-2.0-flash',
+            contents=prompt
+        )
         return response.text
         
     except Exception as e:
