@@ -3,12 +3,20 @@ RAG System for Financial Recommendation System
 Implements retrieval-augmented generation using ChromaDB and sentence transformers
 """
 
+# SQLite fix for Streamlit Cloud (MUST be before chromadb import)
+import os
+try:
+    __import__('pysqlite3')
+    import sys
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ImportError:
+    pass
+
 import pandas as pd
 import numpy as np
 from pathlib import Path
 import json
 import logging
-import os
 from typing import List, Dict, Any, Optional
 import chromadb
 from chromadb.config import Settings
@@ -46,8 +54,8 @@ class FinancialRAGSystem:
             model_name="models/embedding-001"
         )
         
-        # Initialize ChromaDB - use in-memory client for Streamlit Cloud compatibility
-        self.chroma_client = chromadb.Client()
+        # Initialize ChromaDB - EphemeralClient avoids SQLite tenant issues on Streamlit Cloud
+        self.chroma_client = chromadb.EphemeralClient()
         self.collection = None
         
         # Initialize Gemini generative model

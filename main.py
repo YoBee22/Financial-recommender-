@@ -3,6 +3,14 @@
 Main entry point for Streamlit Cloud deployment
 """
 
+# SQLite fix for Streamlit Cloud (MUST be before any chromadb import)
+try:
+    __import__('pysqlite3')
+    import sys
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ImportError:
+    pass
+
 import sys
 import os
 from pathlib import Path
