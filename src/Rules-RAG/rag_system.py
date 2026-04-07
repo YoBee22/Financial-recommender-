@@ -51,7 +51,7 @@ class FinancialRAGSystem:
         # Initialize Google embedding function (replaces SentenceTransformer to avoid PyTorch)
         self.embedding_function = GoogleGenerativeAiEmbeddingFunction(
             api_key=self.api_key,
-            model_name="models/embedding-001"
+            model_name="models/text-embedding-004"
         )
         
         # Initialize ChromaDB - EphemeralClient avoids SQLite tenant issues on Streamlit Cloud
@@ -61,7 +61,7 @@ class FinancialRAGSystem:
         # Initialize Gemini generative model
         if self.api_key:
             genai.configure(api_key=self.api_key)
-            self.model = genai.GenerativeModel('gemini-pro')
+            self.model = genai.GenerativeModel('gemini-2.0-flash')
         
         self.documents = []
         self.is_initialized = False

@@ -1,3 +1,11 @@
+# ─── SQLite fix for Streamlit Cloud (MUST be before any chromadb import) ───
+try:
+    __import__('pysqlite3')
+    import sys
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ImportError:
+    pass  # Local dev — system SQLite is fine
+
 import streamlit as st
 import sys
 import os
@@ -15,6 +23,13 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+
+# Bridge Streamlit Cloud secrets → env vars (so RAG system can find the key)
+try:
+    if "GEMINI_API_KEY" in st.secrets:
+        os.environ["GEMINI_API_KEY"] = st.secrets["GEMINI_API_KEY"]
+except Exception:
+    pass
 
 def check_chromadb():
     """Check if ChromaDB is available"""
