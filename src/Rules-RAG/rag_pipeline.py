@@ -3,7 +3,15 @@ RAG Pipeline for Financial Knowledge Retrieval
 Retrieval-Augmented Generation system for financial advice.
 """
 
+# SQLite fix for Streamlit Cloud (MUST be before chromadb import)
 import os
+try:
+    __import__('pysqlite3')
+    import sys
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ImportError:
+    pass
+
 from pathlib import Path
 import chromadb
 from chromadb.config import Settings
@@ -50,14 +58,14 @@ def init_rag():
     """
     try:
         # Initialize ChromaDB with Google embeddings (avoids PyTorch dependency)
-        api_key = os.getenv("GOOGLE_API_KEY")
+        api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
         
         google_ef = GoogleGenerativeAiEmbeddingFunction(
             api_key=api_key,
-            model_name="models/embedding-001"
+            model_name="models/text-embedding-004"
         )
         
-        chroma_client = chromadb.Client()
+        chroma_client = chromadb.EphemeralClient()
         collection = chroma_client.get_or_create_collection(
             "financial_advice",
             embedding_function=google_ef
@@ -66,7 +74,7 @@ def init_rag():
         # Initialize Gemini
         if api_key:
             genai.configure(api_key=api_key)
-            model = genai.GenerativeModel('gemini-pro')
+            model = genai.GenerativeModel('gemini-2.0-flash')
         else:
             model = None
             
