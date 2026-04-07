@@ -57,7 +57,7 @@ def init_rag():
             model_name="models/embedding-001"
         )
         
-        chroma_client = chromadb.PersistentClient(path="./data/vector_store")
+        chroma_client = chromadb.Client()
         collection = chroma_client.get_or_create_collection(
             "financial_advice",
             embedding_function=google_ef
